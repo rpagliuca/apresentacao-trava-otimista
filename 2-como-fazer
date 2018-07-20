@@ -1,0 +1,23 @@
+Mas como resolver o problema de concorrência em um sistema web?
+
+?
+?
+?
+
+Primeiro, vamos apresentar 2 tipos diferentes de tratamento de concorrência:
+1) Trava pessimista (pessimistic lock)
+2) Trava otimista (optimistic lock)
+
+1) Trava pessimista:
+    - Nesse cenário, criamos uma trava real no recurso. Ao acessar os dados sobre um dado registro em nosso sistema, o sistema trava o registro. Enquanto o primeiro usuário que abrir um registro estiver com a tela aberta, o botão SALVAR fica desabilitado para todos os outros usuários. Fazer isso é custoso, pois cada visualização de dados automaticamente gasta recursos do sistema para concretizar a trava.
+
+2) Trava otimista:
+    - Nesse cenário, que é o mais utilizado para sistemas web, principalmente em sistemas em que a leitura de dados é muito mais comum que a escrita, adicionamos um campo de versionamento no banco de dados (ou timestamp, ou até mesmo um checksum com md5 -obsoleto - ou sha256/sha512). Esse campo de versionamento é armazenado em um campo hidden na tela do usuário, e após gravar os dados, o backend valida se a versão não foi alterada antes de realizar o update dos dados.
+
+*
+*
+*
+
+Parece confuso?
+
+Então vamos nos aprofundar mais na trava otimista, com mais exemplos!

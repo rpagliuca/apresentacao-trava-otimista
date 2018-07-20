@@ -1,0 +1,24 @@
+Olá!
+
+Sou Rafael Santos, do Time Raposa <www.timeraposa.com.br>
+
+Sobre o que é essa apresentação?
+
+*
+*
+*
+
+CONCORRÊNCIA!      ???
+    Mais conhecida pelo nome LOCK, em inglês.
+
+*
+
+Como garantir a integridade dos dados em um sistema de informação, com múltiplos usuários alterando dados ao mesmo tempo (concorrência)?
+
+Resposta = LOCK!!!!
+
+Vemos isso no nosso dia a dia, quando o LibreOffice cria arquivos do tipo .lock~ sempre que um novo documento é aberto. Garantindo que dois processos nunca vão trabalhar simultaneamente com o mesmo documento.
+
+-------------
+
+Mas como fazer isso com um sistema web?

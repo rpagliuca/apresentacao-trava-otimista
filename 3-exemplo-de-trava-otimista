@@ -1,0 +1,47 @@
+1) Sem controle de concorrência:
+
+Modelagem da tabela do banco de dados (sem controle de concorrência):
+
+ArtigoDeBlog
+* id
+* titulo
+* data
+* conteudo 
+* id_autor
+
+---
+
+Vamos supor o seguinte conflito, que é super comum em sistemas web:
+
+Um administrador de um blog percebe diversos problemas de ortografia no conteúdo de um novo artigo publicado por uma outra pessoa, um autor parceiro. Sendo assim, o administrador abre esse artigo para edição em seu sistema web de blog, e começa a fazer as correções.
+
+Nesse meio tempo, o autor resolve alterar o título de seu artigo, pois percebeu que o título atual não ficou tão legal quanto gostaria. Sendo assim, ele abre o mesmo artigo para edição.
+
+Nesse momento, o administrador do blog terminou de fazer as correções ortográficas, e clica no botão SALVAR.
+
+Alguns segundos depois, o autor terminou de atualizar o título de seu artigo, e clica no botão SALVAR.
+
+QUAL É O PROBLEMA?
+
+    Todas as correções ortográficas foram perdidas, já que o último usuário irá reverter as alterações ao clicar no botão SALVAR.
+            :-(
+
+===
+
+2) Agora vamos ao mesmo exemplo, mas com controle de concorrência: 
+
+ArtigoDeBlog
+* id
+* titulo
+* data
+* conteudo 
+* id_autor
+* versao <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+Quando o administrador abre o artigo para edição, é armazenado em um campo hidden qual é a versão que ele está editando. Essa versão vem do banco de dados, e pode ser sequencial, ou um hash dos dados de todos os outros campos, ou até mesmo um valor aleatório ou um UUID.
+
+Quando o autor original carrega o artigo, a mesma versão é carregada para ele em um campo hidden.
+
+Quando o administrador salva suas alterações, o backend valida se a versão que veio via POST (campo hidden) é idêntica à versão armazenada no banco. Caso positivo, grava as mudanças e incrementa/atualiza o campo versão (sequencial, hash, aleatório, UUID, etc).
+
+Quando o autor original tentar salvar suas alterações, o backend identifica que a versão recebida via POST (campo hidden) é diferente da versão atual do registro. Neste momento, uma mensagem de erro é exibida ao usuário, informando que o registro acaba de ser alterado por outro usuário, e pedindo para que o usuário faça a conciliação dos dados e tente salvar novamente.
